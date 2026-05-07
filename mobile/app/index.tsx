@@ -7,29 +7,34 @@ import {
   Alert,
   StyleSheet,
   ActivityIndicator,
+  Platform,
 } from "react-native";
 import axios from "axios";
 import { useRouter } from "expo-router";
-import * as SecureStore from "expo-secure-store"; // Import SecureStore
+import * as SecureStore from "expo-secure-store";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("ahmad@gmail.com");
   const [password, setPassword] = useState("password");
   const [loading, setLoading] = useState(false);
-  const [isCheckingToken, setIsCheckingToken] = useState(true); // State untuk loading awal
+  const [isCheckingToken, setIsCheckingToken] = useState(true);
 
   const router = useRouter();
 
-  // Efek ini berjalan otomatis saat aplikasi pertama kali dibuka
   useEffect(() => {
     const checkUserToken = async () => {
       try {
         // Cek apakah ada token tersimpan di memori HP
-        const userToken = await SecureStore.getItemAsync("sadesa_user_token");
+        let userToken;
+        if (Platform.OS === "web") {
+          userToken = localStorage.getItem("sadesa_user_token");
+        } else {
+          userToken = await SecureStore.getItemAsync("sadesa_user_token");
+        }
 
         if (userToken) {
           // Jika ada token, lewati login dan langsung ke beranda
-          router.replace("/(tabs)");
+          router.replace("/home");
         } else {
           // Jika tidak ada, hentikan loading dan tampilkan form login
           setIsCheckingToken(false);
@@ -52,19 +57,26 @@ export default function LoginScreen() {
     setLoading(true);
     try {
       // Ingat: pastikan IP ini masih sama dengan IP komputermu saat ini
-      const response = await axios.post("http://192.168.8.185:8000/api/login", {
+      const response = await axios.post("http://192.168.1.16:8000/api/login", {
         email: email,
         password: password,
       });
+      // http://172.18.50.209:8000/api/login
 
       const token = response.data.token;
 
       // SIMPAN TOKEN KE MEMORI HP (SecureStore)
-      await SecureStore.setItemAsync("sadesa_user_token", token);
+      if (Platform.OS === "web") {
+        localStorage.setItem("sadesa_user_token", token);
+      } else {
+        await SecureStore.setItemAsync("sadesa_user_token", token);
+      }
 
       // Pindah ke halaman tabs
-      router.replace("/(tabs)");
+      console.log("✅ Login berhasil!");
+      router.replace("/home");
     } catch (error) {
+      console.error("❌ Login gagal:", error);
       Alert.alert(
         "Login Gagal",
         "Email atau Password salah, atau server mati.",

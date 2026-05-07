@@ -7,8 +7,10 @@ const App = () => {
 
   useEffect(() => {
     // Gunakan IP Address komputermu yang dipakai di artisan serve
+    // http://172.18.50.209:8000/api/login
+
     axios
-      .get("http://192.168.8.185:8000/api/tes-koneksi")
+      .get("http://192.168.1.16:8000/api/tes-koneksi")
       .then((response) => {
         setPesan(response.data.pesan);
       })

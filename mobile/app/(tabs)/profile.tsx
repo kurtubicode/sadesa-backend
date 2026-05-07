@@ -1,28 +1,40 @@
-import { router } from "expo-router";
-import { View, Text, TouchableOpacity, Alert, StyleSheet } from "react-native";
+import { router, Link } from "expo-router";
+import { View, Text, TouchableOpacity, Alert, StyleSheet, Platform } from "react-native";
+// import { Link } from "expo-router";
 import * as SecureStore from "expo-secure-store";
 
 export default function ProfileScreen() {
   const handleLogout = async () => {
-    Alert.alert("Konfirmasi", "Yakin ingin keluar dari Sadesa?", [
-      { text: "Batal", style: "cancel" },
-      {
-        text: "Keluar",
-        style: "destructive",
-        onPress: async () => {
-          try {
-            // 1. Hapus kunci token dari brankas HP
-            await SecureStore.deleteItemAsync("sadesa_user_token");
+    const doLogout = async () => {
+      try {
+        // 1. Hapus kunci token dari brankas HP (atau localStorage untuk web)
+        if (Platform.OS === "web") {
+          localStorage.removeItem("sadesa_user_token");
+        } else {
+          await SecureStore.deleteItemAsync("sadesa_user_token");
+        }
+        
+        console.log("✅ Berhasil logout dan menghapus token!");
 
-            // 2. Langsung lempar ke halaman utama (Login)
-            router.replace("/");
-          } catch (error) {
-            console.error("Gagal logout:", error);
-            Alert.alert("Error", "Terjadi kesalahan saat logout.");
-          }
-        },
-      },
-    ]);
+        // 2. Langsung lempar ke halaman utama (Login)
+        router.replace("/");
+      } catch (error) {
+        console.error("Gagal logout:", error);
+        Alert.alert("Error", "Terjadi kesalahan saat logout.");
+      }
+    };
+
+    if (Platform.OS === "web") {
+      // Alert.alert dengan pilihan tombol tidak selalu bekerja dengan baik di fungsi web
+      if (window.confirm("Yakin ingin keluar dari Sadesa?")) {
+        doLogout();
+      }
+    } else {
+      Alert.alert("Konfirmasi", "Yakin ingin keluar dari Sadesa?", [
+        { text: "Batal", style: "cancel" },
+        { text: "Keluar", style: "destructive", onPress: doLogout },
+      ]);
+    }
   };
   return (
     <View style={styles.container}>
@@ -33,6 +45,9 @@ export default function ProfileScreen() {
       <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
         <Text style={styles.logoutText}>LOGOUT</Text>
       </TouchableOpacity>
+      {/* <Link href="/">
+        <Text>logout</Text>
+      </Link> */}
     </View>
   );
 }
