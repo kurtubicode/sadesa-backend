@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { View, Text } from "react-native";
-import axios from "axios";
+import api from "@/lib/api";
 
 const App = () => {
   const [pesan, setPesan] = useState("Loading...");
 
   useEffect(() => {
-    // Gunakan IP Address komputermu yang dipakai di artisan serve
-    axios
-      .get("http://192.168.8.185:8000/api/tes-koneksi")
+    api
+      .get("/api/tes-koneksi")
       .then((response) => {
         setPesan(response.data.pesan);
       })

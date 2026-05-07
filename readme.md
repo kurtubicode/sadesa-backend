@@ -1,67 +1,125 @@
-# SADESA (Sahabat Digital Desa) 🏛️
+# SADESA — Sahabat Digital Desa
 
-Sistem informasi dan administrasi terpadu untuk pelayanan warga Desa Cirangkong. Proyek ini dikembangkan menggunakan arsitektur _monorepo_ untuk memudahkan pengelolaan kode, memisahkan antara sistem _backend_ (Admin Web & API) dan _frontend_ (Aplikasi Mobile Warga).
+Sistem informasi dan administrasi terpadu untuk pelayanan warga Desa Cirangkong. Dibangun dengan arsitektur monorepo yang memisahkan sistem backend (Admin Web & REST API) dan frontend (Aplikasi Mobile Warga).
 
-## 📂 Struktur Repositori
+## Struktur Repositori
 
-Proyek ini terdiri dari dua bagian utama:
+| Direktori  | Teknologi                         | Deskripsi                                                              |
+| :--------- | :-------------------------------- | :--------------------------------------------------------------------- |
+| `/backend` | Laravel 11, Inertia.js, React     | Panel Admin berbasis web, skema database, dan REST API untuk mobile    |
+| `/mobile`  | React Native, Expo Router         | Aplikasi Android/iOS untuk warga mengakses layanan desa                |
+| `/docs`    | Markdown                          | Dokumentasi teknis lengkap (API, arsitektur, onboarding)               |
 
-| Direktori  | Teknologi Utama                   | Deskripsi                                                                                                                  |
-| :--------- | :-------------------------------- | :------------------------------------------------------------------------------------------------------------------------- |
-| `/backend` | **Laravel 11, Inertia.js, React** | Berisi Panel Admin berbasis Web, skema Database, dan REST API (Sanctum) yang bertugas melayani data untuk aplikasi mobile. |
-| `/mobile`  | **React Native, Expo Router**     | Berisi _source code_ aplikasi Android/iOS yang menjadi antarmuka utama bagi warga desa untuk mengakses layanan.            |
+## Prasyarat
 
----
+Pastikan semua tools berikut sudah terinstal:
 
-## 🚀 Panduan Instalasi & Pengembangan (Development)
+- **PHP** >= 8.2 + **Composer**
+- **Node.js** >= 20 + **npm**
+- **MySQL** (via Laragon / XAMPP / Docker)
+- **Expo CLI**: `npm install -g expo-cli`
+- **Expo Go** di HP / Android Emulator / iOS Simulator
 
-Pastikan kamu sudah menginstal **PHP**, **Composer**, **Node.js**, dan database server (seperti **MySQL** via Laragon/XAMPP) di komputermu.
+## Instalasi & Setup
 
-### 1. Setup Backend (Laravel)
+### 1. Clone Repositori
 
-Buka terminal, masuk ke folder `backend`, dan jalankan perintah berikut:
+```bash
+git clone <url-repo>
+cd sadesa-project
+```
 
-`````bash
+### 2. Setup Backend (Laravel)
+
+```bash
 cd backend
 
-# Install dependensi PHP dan Node
+# Install dependensi
 composer install
 npm install
 
 # Setup environment
 cp .env.example .env
 php artisan key:generate
+```
 
-# Lakukan migrasi database (Pastikan database 'sadesa' sudah dibuat)
+Edit file `.env` — sesuaikan konfigurasi database:
+
+```env
+APP_NAME=SADESA
+APP_URL=http://localhost:8000
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=sadesa
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+```bash
+# Buat database 'sadesa' terlebih dahulu, lalu jalankan migrasi
 php artisan migrate
 
-# Jalankan server API (Gunakan IP 0.0.0.0 agar bisa diakses emulator/HP)
+# Build asset frontend (admin panel)
+npm run build
+
+# Jalankan server (gunakan 0.0.0.0 agar bisa diakses dari HP/emulator)
 php artisan serve --host=0.0.0.0 --port=8000
-````
+```
 
-### 2. Setup Mobile (expo)
+### 3. Setup Mobile (React Native)
 
-Buka terminal baru, masuk ke folder mobile, dan jalankan perintah berikut:
-
-````Bash
+```bash
 cd mobile
 
-# Install dependensi React Native
+# Install dependensi
 npm install
+```
 
-# Jalankan server Expo (Gunakan flag -c untuk membersihkan cache jika perlu)
+Sebelum menjalankan aplikasi, update URL API di dua file berikut dengan IP lokal komputermu:
+
+- [`app/index.tsx`](mobile/app/index.tsx) — endpoint login
+- [`app/cekapi.tsx`](mobile/app/cekapi.tsx) — endpoint tes koneksi
+
+Ganti `http://192.168.8.185:8000` dengan IP komputermu (cek dengan `ipconfig` di Windows).
+
+```bash
+# Jalankan Expo (gunakan -c untuk clear cache jika perlu)
 npx expo start -c
+```
 
+Scan QR code dengan Expo Go, atau tekan `a` untuk Android emulator / `i` untuk iOS simulator.
 
-⚠️ Penting untuk Mobile:
-Sebelum melakukan login atau fetch data dari aplikasi mobile, pastikan URL API di dalam source code (menggunakan Axios) sudah disesuaikan dengan IP Address lokal komputermu (contoh: http://192.168.x.x:8000/api/...), bukan localhost.
+## Fitur
 
-✨ Fitur Utama (Tahap Pengembangan)
-[x] Autentikasi API menggunakan Laravel Sanctum.
+| Status | Fitur                                  |
+| :----: | :------------------------------------- |
+| ✅     | Autentikasi API via Laravel Sanctum    |
+| ✅     | Auto-login mobile dengan Expo SecureStore |
+| ✅     | Panel admin web (Inertia.js + React)   |
+| ✅     | Two-factor authentication (web)        |
+| 🚧     | Dashboard informasi warga              |
+| 🚧     | Layanan pengajuan surat desa           |
 
-[x] Sistem Auto-Login di Mobile menggunakan Expo SecureStore.
+## Dokumentasi
 
-[ ] Dashboard Informasi Warga.
+- [API Reference](docs/api.md) — Daftar endpoint REST API
+- [Arsitektur Sistem](docs/architecture.md) — Desain sistem dan keputusan teknis
+- [Panduan Onboarding](docs/onboarding.md) — Setup lengkap untuk developer baru
 
-[ ] Layanan Pengajuan Surat Desa.
-`````
+## Akun Default (Development)
+
+Jalankan seeder (jika tersedia) atau buat user manual via `php artisan tinker`:
+
+```php
+\App\Models\User::create([
+    'name' => 'Admin',
+    'email' => 'admin@sadesa.test',
+    'password' => 'password',
+]);
+```
+
+## Lisensi
+
+Proyek ini dikembangkan untuk keperluan administrasi Desa Cirangkong.

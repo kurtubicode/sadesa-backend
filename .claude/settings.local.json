@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Get-ChildItem -Path \"C:\\\\laragon\\\\www\\\\sadesa-project\\\\.claude\\\\worktrees\\\\fervent-carson-1e8282\" -Force)",
+      "Bash(Select-Object Name, FullName)",
+      "Bash(xargs grep -l \"axios\\\\|api\\\\|fetch\")",
+      "Bash(xargs grep -l \"SecureStore\\\\|axios\")"
+    ]
+  }
+}

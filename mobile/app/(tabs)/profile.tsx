@@ -1,6 +1,7 @@
 import { router } from "expo-router";
 import { View, Text, TouchableOpacity, Alert, StyleSheet } from "react-native";
 import * as SecureStore from "expo-secure-store";
+import api from "@/lib/api";
 
 export default function ProfileScreen() {
   const handleLogout = async () => {
@@ -11,14 +12,15 @@ export default function ProfileScreen() {
         style: "destructive",
         onPress: async () => {
           try {
-            // 1. Hapus kunci token dari brankas HP
+            // 1. Revoke token di server
+            await api.post("/api/logout");
+          } catch {
+            // Lanjutkan logout lokal meski server tidak bisa dihubungi
+          } finally {
+            // 2. Hapus token dari SecureStore
             await SecureStore.deleteItemAsync("sadesa_user_token");
-
-            // 2. Langsung lempar ke halaman utama (Login)
+            // 3. Kembali ke halaman login
             router.replace("/");
-          } catch (error) {
-            console.error("Gagal logout:", error);
-            Alert.alert("Error", "Terjadi kesalahan saat logout.");
           }
         },
       },
