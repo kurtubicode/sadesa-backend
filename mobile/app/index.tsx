@@ -9,9 +9,9 @@ import {
   ActivityIndicator,
   Platform,
 } from "react-native";
-import axios from "axios";
 import { useRouter } from "expo-router";
 import * as SecureStore from "expo-secure-store";
+import api from "@/lib/api";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("ahmad@gmail.com");
@@ -56,8 +56,7 @@ export default function LoginScreen() {
 
     setLoading(true);
     try {
-      // Ingat: pastikan IP ini masih sama dengan IP komputermu saat ini
-      const response = await axios.post("http://192.168.1.16:8000/api/login", {
+      const response = await api.post("/api/login", {
         email: email,
         password: password,
       });

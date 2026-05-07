@@ -1,50 +1,130 @@
-# Welcome to your Expo app 👋
+# SADESA Mobile
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Aplikasi mobile warga Desa Cirangkong, dibangun dengan React Native (Expo). Warga dapat login, melihat informasi desa, dan mengakses layanan administrasi langsung dari smartphone.
 
-## Get started
+## Prasyarat
 
-1. Install dependencies
+- Node.js >= 20
+- npm >= 10
+- **Expo Go** (install di HP Android/iOS) — atau gunakan emulator
+- Backend SADESA sudah berjalan di jaringan yang sama
 
-   ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+## Instalasi
 
 ```bash
-npm run reset-project
+# dari root proyek
+cd mobile
+npm install
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Konfigurasi URL API
 
-## Learn more
+API URL di-hardcode di dua file. Sebelum menjalankan aplikasi, ganti IP dengan IP lokal komputermu:
 
-To learn more about developing your project with Expo, look at the following resources:
+| File | Variabel | Default |
+|------|----------|---------|
+| [`app/index.tsx`](app/index.tsx) | `BASE_URL` dalam axios.post | `http://192.168.8.185:8000` |
+| [`app/cekapi.tsx`](app/cekapi.tsx) | URL dalam axios.get | `http://192.168.8.185:8000` |
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+Cara cek IP lokal di Windows:
+```bash
+ipconfig
+# Cari "IPv4 Address" pada adapter Wi-Fi
+```
 
-## Join the community
+## Menjalankan Aplikasi
 
-Join our community of developers creating universal apps.
+```bash
+npx expo start
+```
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Pilih salah satu cara:
+- Scan QR code dengan **Expo Go** di HP
+- Tekan `a` — buka di Android Emulator
+- Tekan `i` — buka di iOS Simulator
+- Tekan `w` — buka di browser (terbatas)
+
+Gunakan flag `-c` untuk membersihkan cache jika ada masalah:
+
+```bash
+npx expo start -c
+```
+
+## Struktur Direktori
+
+```
+mobile/
+├── app/
+│   ├── _layout.tsx          # Root layout, konfigurasi Stack navigator
+│   ├── index.tsx            # Halaman login
+│   ├── cekapi.tsx           # Halaman tes koneksi API (development)
+│   └── (tabs)/
+│       ├── _layout.tsx      # Konfigurasi tab navigator
+│       ├── index.tsx        # Tab Home
+│       └── profile.tsx      # Tab Profil & logout
+├── components/
+│   ├── ParallaxScrollView.tsx
+│   ├── ThemedText.tsx
+│   ├── ThemedView.tsx
+│   ├── HapticTab.tsx
+│   └── IconSymbol.tsx
+├── constants/
+│   └── Colors.ts            # Palet warna light/dark mode
+├── hooks/
+│   └── useColorScheme.ts
+└── app.json                 # Konfigurasi Expo
+```
+
+## Alur Autentikasi
+
+```
+App dibuka
+    │
+    ▼
+Cek SecureStore ("sadesa_user_token")
+    │
+    ├── Token ada → navigasi ke /(tabs) (auto-login)
+    │
+    └── Token tidak ada → tampilkan halaman login
+            │
+            ▼
+        User input email + password
+            │
+            ▼
+        POST /api/login
+            │
+            ├── Sukses → simpan token di SecureStore → navigasi ke /(tabs)
+            │
+            └── Gagal → tampilkan pesan error
+```
+
+**Logout:**
+- Token dihapus dari SecureStore
+- Navigasi kembali ke halaman login
+
+## Dependensi Utama
+
+| Package | Versi | Kegunaan |
+|---------|-------|---------|
+| `expo` | ~54.0.33 | Framework React Native |
+| `expo-router` | ~6.0.23 | File-based routing |
+| `expo-secure-store` | ~15.0.8 | Penyimpanan token yang aman |
+| `axios` | 1.13.6 | HTTP client untuk API calls |
+| `react-native` | 0.81.5 | Core framework |
+
+## Troubleshooting
+
+**Tidak bisa connect ke API:**
+1. Pastikan backend sudah jalan (`php artisan serve --host=0.0.0.0 --port=8000`)
+2. Pastikan HP/emulator dan komputer di jaringan Wi-Fi yang sama
+3. Ganti URL di `app/index.tsx` dan `app/cekapi.tsx` dengan IP yang benar
+4. Test koneksi via halaman **Cek API** di dalam aplikasi
+
+**Metro bundler error / cache stale:**
+```bash
+npx expo start -c
+```
+
+**Expo Go tidak mau scan QR:**
+- Pastikan Expo Go sudah update ke versi terbaru
+- Coba jalankan dengan `npx expo start --tunnel`
