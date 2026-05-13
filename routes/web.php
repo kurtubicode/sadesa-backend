@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\AdminPengaduanController;
 use App\Http\Controllers\Admin\AdminPengajuanController;
 use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\InformasiController;
 use App\Http\Controllers\KepalaDesa\KepalaPengajuanController;
 use App\Http\Controllers\Staff\StaffPengajuanController;
 use Illuminate\Support\Facades\Route;
@@ -14,6 +15,10 @@ use Laravel\Fortify\Features;
 Route::inertia('/', 'welcome', [
     'canRegister' => Features::enabled(Features::registration()),
 ])->name('home');
+
+// ─── Informasi publik (tanpa auth) ────────────────────────────────────────────
+Route::get('informasi',        [InformasiController::class, 'index'])->name('informasi.index');
+Route::get('informasi/{slug}', [InformasiController::class, 'show'])->name('informasi.show');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');

@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\PengajuanSurat;
-use App\Models\Pengaduan;
-use App\Models\User;
 use App\Models\AuditLog;
+use App\Models\KontenDesa;
+use App\Models\Pengaduan;
+use App\Models\PengajuanSurat;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -20,7 +21,7 @@ class DashboardController extends Controller
             'admin'       => $this->admin($request),
             'kepala_desa' => $this->kepalaDesa($request),
             'staff'       => $this->staff($request),
-            default       => Inertia::render('dashboard/warga'),
+            default       => $this->warga($request),
         };
     }
 
@@ -81,6 +82,36 @@ class DashboardController extends Controller
                 'selesai_bulan_ini'     => $selesaiBulanIni,
             ],
             'recent_pengajuan' => $recentPengajuan,
+        ]);
+    }
+
+    // ─── Warga ────────────────────────────────────────────────────────────────
+
+    private function warga(Request $request): Response
+    {
+        $user = $request->user();
+
+        $recentPengajuan = PengajuanSurat::where('user_id', $user->id)
+            ->with('masterSurat:id,nama,kode')
+            ->latest()->take(5)
+            ->get(['id', 'no_pengajuan', 'master_surat_id', 'status', 'created_at']);
+
+        $recentPengaduan = Pengaduan::where('user_id', $user->id)
+            ->latest()->take(5)
+            ->get(['id', 'judul', 'status', 'created_at']);
+
+        $recentInformasi = KontenDesa::published()
+            ->latest()->take(3)
+            ->get(['id', 'judul', 'slug', 'tipe', 'created_at']);
+
+        return Inertia::render('dashboard/warga', [
+            'stats' => [
+                'total_pengajuan' => PengajuanSurat::where('user_id', $user->id)->count(),
+                'total_pengaduan' => Pengaduan::where('user_id', $user->id)->count(),
+            ],
+            'recent_pengajuan' => $recentPengajuan,
+            'recent_pengaduan' => $recentPengaduan,
+            'recent_informasi' => $recentInformasi,
         ]);
     }
 

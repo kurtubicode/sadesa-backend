@@ -104,11 +104,15 @@ Route::get('/kategori-aduan', fn () => response()->json([
 ]));
 
 // Informasi desa — berita & pengumuman publik
-Route::get('/informasi', fn () => response()->json([
-    'data' => KontenDesa::published()
+Route::get('/informasi', function (Request $request) {
+    $limit = (int) ($request->query('per_page', 20));
+    $limit = min(max($limit, 1), 50);
+    $data  = KontenDesa::published()
         ->orderByDesc('created_at')
-        ->get(['id', 'judul', 'slug', 'tipe', 'created_at']),
-]));
+        ->limit($limit)
+        ->get(['id', 'judul', 'slug', 'tipe', 'created_at']);
+    return response()->json(['data' => $data]);
+});
 
 Route::get('/informasi/{slug}', function (string $slug) {
     $konten = KontenDesa::published()->where('slug', $slug)->firstOrFail();

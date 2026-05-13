@@ -1,9 +1,7 @@
 import { Link, usePage } from '@inertiajs/react';
 import {
-    BarChart3,
     BookOpen,
     ClipboardList,
-    FileCheck,
     FileText,
     LayoutGrid,
     Megaphone,
@@ -41,16 +39,21 @@ const adminNavItems: NavItem[] = [
 ];
 
 const staffNavItems: NavItem[] = [
-    { title: 'Dashboard',             href: dashboard(),       icon: LayoutGrid },
-    { title: 'Antrian Pengajuan',     href: '/staff/pengajuan', icon: ClipboardList },
-    { title: 'Verifikasi Berkas',     href: '/staff/verifikasi', icon: FileCheck },
-    { title: 'Pengaduan Masuk',       href: '/staff/pengaduan',  icon: Megaphone },
+    { title: 'Dashboard',         href: dashboard(),            icon: LayoutGrid },
+    { title: 'Antrian Pengajuan', href: '/staff/pengajuan',    icon: ClipboardList },
+    { title: 'Pengaturan',        href: '/settings',            icon: Settings },
 ];
 
 const kepalDesaNavItems: NavItem[] = [
-    { title: 'Dashboard',         href: dashboard(),            icon: LayoutGrid },
-    { title: 'Pengesahan Surat',  href: '/kepala-desa/pengajuan', icon: ShieldCheck },
-    { title: 'Statistik',         href: '/kepala-desa/statistik', icon: BarChart3 },
+    { title: 'Dashboard',         href: dashboard(),              icon: LayoutGrid },
+    { title: 'Pengajuan Surat',   href: '/kepala-desa/pengajuan', icon: ShieldCheck },
+    { title: 'Pengaturan',        href: '/settings',              icon: Settings },
+];
+
+const wargaNavItems: NavItem[] = [
+    { title: 'Dashboard',         href: dashboard(),   icon: LayoutGrid },
+    { title: 'Informasi Desa',    href: '/informasi',  icon: BookOpen },
+    { title: 'Pengaturan',        href: '/settings',   icon: Settings },
 ];
 
 const footerNavItems: NavItem[] = [];
@@ -62,11 +65,10 @@ export function AppSidebar() {
     const role = auth?.user?.role ?? 'staff';
 
     const navItems =
-        role === 'admin'
-            ? adminNavItems
-            : role === 'kepala_desa'
-              ? kepalDesaNavItems
-              : staffNavItems;
+        role === 'admin'       ? adminNavItems      :
+        role === 'kepala_desa' ? kepalDesaNavItems   :
+        role === 'staff'       ? staffNavItems       :
+                                 wargaNavItems;
 
     return (
         <Sidebar collapsible="icon" variant="inset">

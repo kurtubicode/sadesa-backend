@@ -59,12 +59,30 @@ class PengajuanSuratController extends Controller
             'dokumenPersyaratan',
             'verifikasiBerkas.staff:id,name',
             'pengesahanPermohonan.kepalaDesa:id,name',
-            'suratOutput',
         ])
             ->where('user_id', $request->user()->id)
             ->findOrFail($id);
 
-        return response()->json(['data' => $pengajuan]);
+        $dokumen = $pengajuan->dokumenPersyaratan->map(fn ($d) => [
+            'id'        => $d->id,
+            'nama_file' => $d->nama_file,
+            'tipe'      => $d->path_file ? pathinfo($d->path_file, PATHINFO_EXTENSION) : null,
+            'url'       => $d->path_file ? asset('storage/' . $d->path_file) : null,
+        ]);
+
+        return response()->json([
+            'data' => [
+                'id'           => $pengajuan->id,
+                'no_pengajuan' => $pengajuan->no_pengajuan,
+                'jenis_surat'  => $pengajuan->masterSurat?->nama_surat ?? '—',
+                'persyaratan'  => $pengajuan->masterSurat?->persyaratan,
+                'status'       => $pengajuan->status,
+                'catatan'      => $pengajuan->catatan,
+                'keterangan'   => $pengajuan->data_formulir['keterangan'] ?? null,
+                'tanggal'      => $pengajuan->created_at->format('d/m/Y'),
+                'dokumen'      => $dokumen,
+            ],
+        ]);
     }
 
     /**
