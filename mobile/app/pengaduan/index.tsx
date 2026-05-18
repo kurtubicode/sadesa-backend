@@ -19,7 +19,6 @@ interface Aduan {
   kategori: string;
   status: string;
   tanggal: string;
-  deskripsi: string;
 }
 
 export default function RiwayatPengaduanScreen() {
@@ -69,7 +68,11 @@ export default function RiwayatPengaduanScreen() {
           renderItem={({ item }) => {
             const cfg = STATUS_CONFIG[item.status] ?? { warna: "#999", label: item.status };
             return (
-              <View style={styles.card}>
+              <TouchableOpacity
+                style={styles.card}
+                onPress={() => router.push(`/pengaduan/${item.id}` as any)}
+                activeOpacity={0.8}
+              >
                 <View style={styles.cardHeader}>
                   <Text style={styles.kategori}>{item.kategori}</Text>
                   <View style={[styles.badge, { backgroundColor: cfg.warna + "22" }]}>
@@ -77,9 +80,9 @@ export default function RiwayatPengaduanScreen() {
                   </View>
                 </View>
                 <Text style={styles.judul}>{item.judul}</Text>
-                <Text style={styles.deskripsi} numberOfLines={2}>{item.deskripsi}</Text>
                 <Text style={styles.tanggal}>Dilaporkan: {item.tanggal}</Text>
-              </View>
+                <Text style={styles.lihatDetail}>Lihat detail →</Text>
+              </TouchableOpacity>
             );
           }}
         />
@@ -105,6 +108,6 @@ const styles = StyleSheet.create({
   badge:        { paddingHorizontal: 8, paddingVertical: 3, borderRadius: 10 },
   badgeText:    { fontSize: 11, fontWeight: "700" },
   judul:        { fontSize: 15, fontWeight: "600", color: "#222", marginBottom: 4 },
-  deskripsi:    { fontSize: 13, color: "#666", marginBottom: 6 },
-  tanggal:      { fontSize: 12, color: "#999" },
+  tanggal:      { fontSize: 12, color: "#999", marginBottom: 6 },
+  lihatDetail:  { fontSize: 12, color: "#4A90E2", fontWeight: "600" },
 });
