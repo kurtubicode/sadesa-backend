@@ -1,7 +1,7 @@
 # SADESA — Status Fitur Lengkap
 
 > Dokumen ini mencatat semua fitur yang sudah selesai, sedang berjalan, dan belum dikerjakan.  
-> **Terakhir diperbarui:** 19 Mei 2026 — Register page + Admin Master Surat + Tanggapi Pengaduan + Data Master (Wilayah & Kategori)
+> **Terakhir diperbarui:** 29 Mei 2026 — Verifikasi Warga + Buku Tamu Digital + PDF Surat + Dashboard Redesign (semua role) + Notifikasi + Staff Pengaduan + Audit Log
 
 ---
 
@@ -53,7 +53,17 @@
 |-------|--------|---------|
 | Statistik total pengajuan, pengaduan, user | ✅ | |
 | Statistik pengajuan per status | ✅ | |
-| Grafik / chart | ❌ | |
+| Grafik bar chart mingguan (7 hari) | ✅ | Div-based, teal-600 |
+| Activity feed audit log terbaru | ✅ | Colored dots + WIB timestamp |
+| Tabel pengajuan terbaru (avatar + NIK) | ✅ | |
+
+### Verifikasi Warga
+
+| Fitur | Status | Catatan |
+|-------|--------|---------|
+| List antrian verifikasi (filter status) | ✅ | |
+| Detail dokumen (KTP, KK, foto selfie) | ✅ | |
+| Setujui / tolak + catatan | ✅ | Status akun → `aktif` / `ditolak` |
 
 ### Manajemen Pengguna
 
@@ -70,25 +80,25 @@
 
 | Fitur | Status | Catatan |
 |-------|--------|---------|
-| List jenis surat | ❌ | Model `MasterSurat` ada, belum ada halaman admin |
-| Tambah / edit / hapus jenis surat | ❌ | |
-| Aktifkan / nonaktifkan jenis surat | ❌ | |
-| Kelola persyaratan per jenis surat | ❌ | Field `persyaratan` di model sudah ada |
+| List jenis surat | ✅ | |
+| Tambah / edit / hapus jenis surat | ✅ | |
+| Aktifkan / nonaktifkan jenis surat | ✅ | |
+| Kelola persyaratan per jenis surat | ✅ | Array JSON di field `persyaratan` |
 
 ### Manajemen Wilayah
 
 | Fitur | Status | Catatan |
 |-------|--------|---------|
-| List wilayah (desa, dusun, RW, RT) | ❌ | Model `Wilayah` ada, belum ada halaman admin |
-| Tambah / edit / hapus wilayah | ❌ | |
-| Hierarki wilayah (parent-child) | ❌ | |
+| List wilayah (desa, dusun, RW, RT) | ✅ | |
+| Tambah / edit / hapus wilayah | ✅ | |
+| Hierarki wilayah (parent-child) | ✅ | |
 
 ### Manajemen Kategori Pengaduan
 
 | Fitur | Status | Catatan |
 |-------|--------|---------|
-| List kategori aduan | ❌ | Model `KategoriAduan` ada, endpoint GET publik sudah ada |
-| Tambah / edit / hapus kategori | ❌ | |
+| List kategori aduan | ✅ | |
+| Tambah / edit / hapus kategori | ✅ | |
 
 ### Pengajuan Surat (Admin View)
 
@@ -96,8 +106,8 @@
 |-------|--------|---------|
 | List semua pengajuan (filter status, search) | ✅ | |
 | Detail pengajuan + riwayat verifikasi & pengesahan | ✅ | |
-| Download / lihat surat output | 🔜 | Model `SuratOutput` ada |
-| Generate surat PDF | ❌ | |
+| Preview surat (HTML in-browser) | ✅ | |
+| Download surat PDF | ✅ | DomPDF, kop surat otomatis |
 | Upload surat output | ❌ | |
 
 ### Pengaduan (Admin View)
@@ -106,8 +116,8 @@
 |-------|--------|---------|
 | List semua pengaduan (filter status) | ✅ | |
 | Detail pengaduan + foto bukti | ✅ | |
-| Tanggapi pengaduan (tambah komentar) | ❌ | Model `TanggapanPengaduan` ada, belum ada form di admin |
-| Ubah status pengaduan | ❌ | |
+| Tanggapi pengaduan (tambah komentar) | ✅ | |
+| Ubah status pengaduan | ✅ | |
 
 ### Konten Desa (Berita & Pengumuman)
 
@@ -134,8 +144,8 @@
 
 | Fitur | Status | Catatan |
 |-------|--------|---------|
-| List kunjungan tamu | ❌ | Model `BukuTamu` ada, belum ada halaman |
-| Detail kunjungan | ❌ | |
+| List kunjungan tamu (filter tanggal, search) | ✅ | Halaman `/admin/buku-tamu` |
+| Statistik hari ini / bulan ini / total | ✅ | |
 | Export data kunjungan | ❌ | |
 
 ### Data Penduduk
@@ -153,12 +163,13 @@
 
 | Fitur | Status | Catatan |
 |-------|--------|---------|
-| Dashboard (statistik tugas) | ✅ | |
+| Dashboard (statistik tugas + antrian prioritas) | ✅ | Redesign teal, rounded-2xl |
 | Antrian pengajuan (filter status, search) | ✅ | |
 | Detail pengajuan + dokumen persyaratan | ✅ | |
 | Verifikasi: setujui atau tolak + catatan | ✅ | Status → `menunggu_pengesahan` / `ditolak_staff` |
-| Input Buku Tamu | ❌ | |
-| Handle pengaduan (tanggapi + ubah status) | ❌ | |
+| Preview & download surat PDF | ✅ | |
+| Tandai siap diambil / selesai | ✅ | |
+| Handle pengaduan (tanggapi + ubah status) | ✅ | |
 
 ---
 
@@ -166,9 +177,10 @@
 
 | Fitur | Status | Catatan |
 |-------|--------|---------|
-| Dashboard (statistik pengesahan) | ✅ | |
+| Dashboard (statistik pengesahan bulanan) | ✅ | Redesign teal, rounded-2xl |
 | List pengajuan siap disahkan | ✅ | Filter `menunggu_pengesahan` |
 | Detail pengajuan + riwayat verifikasi staff | ✅ | |
+| Preview surat sebelum pengesahan | ✅ | |
 | Pengesahan: setujui atau tolak + catatan | ✅ | Status → `disetujui` / `ditolak_kepala` |
 
 ---
@@ -192,6 +204,7 @@
 | Detail artikel | ✅ | `/informasi/{slug}` |
 | Artikel terkait di sidebar | ✅ | |
 | Header SADESA + link ke Portal | ✅ | |
+| Form Buku Tamu tamu | ✅ | `/buku-tamu`, full-page teal gradient |
 
 ---
 
@@ -216,8 +229,10 @@
 | Breadcrumb navigasi | ✅ | |
 | Flash notification banner | ✅ | success / error / info, dismiss manual |
 | Dark mode | ✅ | Sistem / manual |
-| CheckRole middleware (web redirect, API JSON) | ✅ | Diperbaiki dari semula selalu JSON 403 |
+| CheckRole middleware (web redirect, API JSON) | ✅ | |
 | Audit log otomatis (`AuditLog::catat()`) | ✅ | Dipanggil di controller admin/staff/kepala |
+| UI konsisten: rounded-2xl, solid teal icons, dark mode | ✅ | Semua 4 dashboard |
+| Notifikasi database (bell icon) | ✅ | API `/api/notifications` |
 
 ---
 
@@ -380,13 +395,14 @@
 
 ---
 
-## 17. Mobile — Buku Tamu (QR Scan)
+## 17. Mobile — Buku Tamu
 
 | Fitur | Status | Catatan |
 |-------|--------|---------|
+| Form input tamu (nama, instansi, keperluan, no HP) | ✅ | Auto-fill dari profil user |
+| Submit ke API `POST /api/buku-tamu` | ✅ | |
+| Layar sukses + tombol isi ulang / kembali | ✅ | |
 | Scan QR code dari kantor desa | ❌ | Butuh `expo-camera` |
-| Form input tamu (nama, instansi, keperluan) | ❌ | |
-| Submit kunjungan ke API | ❌ | Butuh backend endpoint `/api/buku-tamu` |
 | Riwayat kunjungan | ❌ | |
 
 ---
@@ -405,8 +421,10 @@
 | Nomor pengajuan otomatis (`ADM/YYYYMMDD/XXXX`) | ✅ | |
 | Flash session → Inertia shared props | ✅ | success / error / info |
 | Sanctum personal access token | ✅ | |
-| Notifikasi push (Firebase) | ❌ | Model `Notifikasi` ada |
-| Generate PDF surat output | ❌ | Model `SuratOutput` ada |
+| Notifikasi database (bell, mark read) | ✅ | API `/api/notifications` |
+| Generate PDF surat output (DomPDF) | ✅ | Kop surat + template per jenis |
+| Preview surat HTML (browser) | ✅ | |
+| Notifikasi push (Firebase) | ❌ | |
 | Sistem ulasan layanan | ❌ | Model `Ulasan` ada |
 
 ### Mobile
@@ -431,51 +449,42 @@
 | Platform | Selesai | Parsial | Belum |
 |----------|---------|---------|-------|
 | **Web — Auth** | 9 | 1 | 0 |
-| **Web — Admin** | 20 | 2 | 18 |
-| **Web — Staff** | 5 | 0 | 3 |
-| **Web — Kepala Desa** | 4 | 0 | 0 |
+| **Web — Admin** | 36 | 0 | 8 |
+| **Web — Staff** | 7 | 0 | 0 |
+| **Web — Kepala Desa** | 5 | 0 | 0 |
 | **Web — Warga** | 4 | 0 | 0 |
-| **Web — Publik** | 4 | 0 | 0 |
+| **Web — Publik** | 5 | 0 | 0 |
 | **Mobile — Core** | 25 | 0 | 4 |
 | **Mobile — Pengajuan** | 14 | 0 | 3 |
 | **Mobile — Pengaduan** | 13 | 0 | 2 |
-| **Mobile — Lainnya** | 10 | 0 | 8 |
+| **Mobile — Lainnya** | 12 | 0 | 6 |
 
 ### Prioritas yang Belum Dikerjakan
 
 #### 🔴 High
 
-| # | Fitur | Platform |
-|---|-------|----------|
-| ~~1~~ | ~~Admin: Kelola Master Surat (CRUD)~~ | ~~Web~~ ✅ Selesai |
-| ~~2~~ | ~~Staff: Handle pengaduan (tanggapi + ubah status)~~ | ~~Web~~ ✅ Selesai |
-| ~~3~~ | ~~Admin: Tanggapi pengaduan + ubah status~~ | ~~Web~~ ✅ Selesai |
+> Semua item high priority sudah selesai ✅
 
 #### 🟡 Medium
 
 | # | Fitur | Platform |
 |---|-------|----------|
-| ~~4~~ | ~~Admin: Kelola Wilayah (CRUD)~~ | ~~Web~~ ✅ Selesai |
-| ~~5~~ | ~~Admin: Kelola Kategori Aduan (CRUD)~~ | ~~Web~~ ✅ Selesai |
-| 6 | Admin: Generate / upload surat output | Web |
-| 7 | Register page dalam Bahasa Indonesia | Web |
-| 8 | Search di tab Riwayat & Status | Mobile |
-| 9 | Loading skeleton | Mobile |
-| 10 | Filter & search di list informasi | Mobile |
+| 1 | Search di tab Riwayat & Status | Mobile |
+| 2 | Loading skeleton / shimmer | Mobile |
+| 3 | Filter & search di list informasi mobile | Mobile |
+| 4 | Upload gambar konten desa | Web |
 
 #### 🟢 Low / Future
 
 | # | Fitur | Platform |
 |---|-------|----------|
-| 11 | Push notifications (Firebase) | Web + Mobile |
-| 12 | Scan QR Buku Tamu | Mobile |
-| 13 | Download surat hasil (PDF) | Mobile |
-| 14 | Edit profil warga | Mobile |
-| 15 | Token refresh / auto-logout | Mobile |
-| 16 | Admin: Data Penduduk | Web |
-| 17 | Admin: Buku Tamu (view & manage) | Web |
-| 18 | Rich text editor konten desa | Web |
-| 19 | Form dinamis per jenis surat | Mobile |
-| 20 | Sistem ulasan layanan | Web + Mobile |
-| 21 | Grafik statistik dashboard | Web |
-| 22 | Export audit log | Web |
+| 5 | Push notifications (Firebase) | Web + Mobile |
+| 6 | Scan QR Buku Tamu | Mobile |
+| 7 | Download surat PDF di mobile | Mobile |
+| 8 | Edit profil & ubah password di mobile | Mobile |
+| 9 | Token refresh / auto-logout | Mobile |
+| 10 | Admin: Data Penduduk (CRUD + import) | Web |
+| 11 | Rich text editor konten desa | Web |
+| 12 | Form field dinamis per jenis surat | Mobile |
+| 13 | Sistem ulasan layanan | Web + Mobile |
+| 14 | Export audit log & buku tamu | Web |

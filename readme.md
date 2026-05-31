@@ -33,15 +33,19 @@ sadesa-project/
 
 | Fitur | Admin | Staff | Kepala Desa | Warga |
 |-------|-------|-------|-------------|-------|
-| Dashboard statistik | ✅ | ✅ | ✅ | ✅ |
+| Dashboard statistik & grafik | ✅ | ✅ | ✅ | ✅ |
 | Kelola pengguna | ✅ | — | — | — |
+| Verifikasi warga (KTP/KK) | ✅ | — | — | — |
 | Kelola jenis surat | ✅ | — | — | — |
 | Verifikasi pengajuan | ✅ | ✅ | — | — |
 | Pengesahan pengajuan | ✅ | — | ✅ | — |
+| Generate & download surat PDF | — | ✅ | — | — |
 | Kelola pengaduan | ✅ | ✅ | — | ✅ (own) |
 | Konten desa (berita/pengumuman) | ✅ | — | — | ✅ (read) |
+| Buku Tamu Digital | ✅ | — | — | — |
 | Audit log | ✅ | — | — | — |
-| Wilayah & kategori | ✅ | — | — | — |
+| Wilayah & kategori aduan | ✅ | — | — | — |
+| Notifikasi in-app | ✅ | ✅ | ✅ | ✅ |
 
 ### Aplikasi Mobile (Warga Only)
 
@@ -61,6 +65,8 @@ sadesa-project/
 | Riwayat & Status — tab + filter per status | ✅ |
 | Profil — data akun + logout | ✅ |
 | Informasi Desa — list & detail artikel | ✅ |
+| Buku Tamu — form kunjungan (auto-fill dari profil) | ✅ |
+| Notifikasi — list + tandai sudah dibaca | ✅ |
 
 ---
 
@@ -111,11 +117,11 @@ DB_PASSWORD=
 ```
 
 ```bash
-# Migrasi database
-php artisan migrate
+# Migrasi + seeder sekaligus
+php artisan migrate:fresh --seed
 
-# Isi data awal (opsional)
-php artisan db:seed
+# Atau hanya migrasi tanpa seeder
+php artisan migrate
 
 # Build asset frontend
 npm run build
@@ -151,40 +157,16 @@ Scan QR code dengan **Expo Go**, atau tekan `a` untuk Android emulator / `i` unt
 
 ## Akun Default (Development)
 
-Buat akun via seeder atau Tinker:
+Akun dibuat otomatis oleh `UserSeeder` saat `migrate:fresh --seed`:
 
-```bash
-php artisan tinker
-```
+| Role | Email | Password |
+|------|-------|----------|
+| Admin | `admin@sadesa.test` | `password` |
+| Staff | `staff@sadesa.test` | `password` |
+| Kepala Desa | `kepala@sadesa.test` | `password` |
+| Warga | `warga@sadesa.test` | `password` |
 
-```php
-// Admin
-\App\Models\User::create([
-    'name' => 'Admin Desa', 'email' => 'admin@sadesa.test',
-    'password' => 'password', 'role' => 'admin', 'status' => 'aktif',
-]);
-
-// Staff
-\App\Models\User::create([
-    'name' => 'Petugas Desa', 'email' => 'staff@sadesa.test',
-    'password' => 'password', 'role' => 'staff', 'status' => 'aktif',
-]);
-
-// Kepala Desa
-\App\Models\User::create([
-    'name' => 'Kepala Desa', 'email' => 'kepala@sadesa.test',
-    'password' => 'password', 'role' => 'kepala_desa', 'status' => 'aktif',
-]);
-
-// Warga (untuk testing mobile)
-\App\Models\User::create([
-    'name' => 'Warga Cirangkong', 'email' => 'warga@sadesa.test',
-    'password' => 'password', 'role' => 'warga', 'status' => 'aktif',
-    'nik' => '3210000000000001',
-]);
-```
-
-Login web di `http://localhost:8000/login`.
+Login web di `http://localhost:8000/login`.  
 Login mobile dengan akun warga via aplikasi Expo Go.
 
 ---
