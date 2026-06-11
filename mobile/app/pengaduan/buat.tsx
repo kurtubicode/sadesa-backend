@@ -8,6 +8,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import * as ImagePicker from "expo-image-picker";
+import * as Location from "expo-location";
+import MapView, { Marker, MapPressEvent } from "react-native-maps";
 import api from "@/lib/api";
 import { COLORS, FONT, RADIUS, SHADOW, SPACING } from "@/constants/theme";
 
@@ -92,26 +94,31 @@ const si = StyleSheet.create({
 
 // ─── Step 1 — Form ────────────────────────────────────────────────────────────
 
+interface Koordinat { latitude: number; longitude: number; }
+
 interface Step1Props {
   selectedKat: KategoriAduan | null;
   judul: string;
   deskripsi: string;
   lokasi: string;
+  koordinat: Koordinat | null;
   buktiList: BuktiItem[];
   maxBukti: number;
   onJudulChange: (v: string) => void;
   onDeskripsiChange: (v: string) => void;
   onLokasiChange: (v: string) => void;
+  onKoordinatChange: (k: Koordinat | null) => void;
   onOpenKatModal: () => void;
   onTambahBukti: () => void;
   onHapusBukti: (i: number) => void;
 }
 
 function Step1Form({
-  selectedKat, judul, deskripsi, lokasi, buktiList, maxBukti,
-  onJudulChange, onDeskripsiChange, onLokasiChange,
+  selectedKat, judul, deskripsi, lokasi, koordinat, buktiList, maxBukti,
+  onJudulChange, onDeskripsiChange, onLokasiChange, onKoordinatChange,
   onOpenKatModal, onTambahBukti, onHapusBukti,
 }: Step1Props) {
+  const [loadingLokasi, setLoadingLokasi] = useState(false);
   return (
     <View style={styles.stepWrap}>
       <Text style={styles.stepTitle}>Detail Laporan</Text>
@@ -225,12 +232,67 @@ function Step1Form({
         </View>
       </View>
 
-      {/* Map placeholder */}
-      <View style={styles.mapPlaceholder}>
-        <Ionicons name="map-outline" size={32} color={COLORS.textMuted} />
-        <Text style={styles.mapText}>Pilih titik lokasi di peta</Text>
-        <Text style={styles.mapSub}>Fitur peta interaktif segera hadir</Text>
+      {/* Tombol ambil lokasi GPS */}
+      <TouchableOpacity
+        style={styles.btnLokasi}
+        activeOpacity={0.8}
+        disabled={loadingLokasi}
+        onPress={async () => {
+          setLoadingLokasi(true);
+          try {
+            const { status } = await Location.requestForegroundPermissionsAsync();
+            if (status !== "granted") {
+              Alert.alert("Izin Ditolak", "Aktifkan izin lokasi di pengaturan perangkat.");
+              return;
+            }
+            const pos = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.High });
+            onKoordinatChange({ latitude: pos.coords.latitude, longitude: pos.coords.longitude });
+          } catch {
+            Alert.alert("Gagal", "Tidak dapat mengambil lokasi. Coba lagi.");
+          } finally {
+            setLoadingLokasi(false);
+          }
+        }}
+      >
+        {loadingLokasi ? (
+          <ActivityIndicator size="small" color={COLORS.primary} />
+        ) : (
+          <Ionicons name="navigate-outline" size={16} color={COLORS.primary} />
+        )}
+        <Text style={styles.btnLokasiText}>
+          {koordinat ? "Perbarui Lokasi Saya" : "Gunakan Lokasi Saya"}
+        </Text>
+      </TouchableOpacity>
+
+      {/* MapView */}
+      <View style={styles.mapWrap}>
+        <MapView
+          style={styles.map}
+          region={koordinat
+            ? { ...koordinat, latitudeDelta: 0.005, longitudeDelta: 0.005 }
+            : { latitude: -6.8, longitude: 107.5, latitudeDelta: 0.05, longitudeDelta: 0.05 }
+          }
+          onPress={(e: MapPressEvent) => onKoordinatChange(e.nativeEvent.coordinate)}
+        >
+          {koordinat && <Marker coordinate={koordinat} />}
+        </MapView>
+        {!koordinat && (
+          <View style={styles.mapOverlayHint} pointerEvents="none">
+            <Ionicons name="finger-print-outline" size={22} color="#fff" />
+            <Text style={styles.mapOverlayText}>Tap peta untuk pilih titik lokasi</Text>
+          </View>
+        )}
+        {koordinat && (
+          <TouchableOpacity style={styles.mapClearBtn} onPress={() => onKoordinatChange(null)}>
+            <Ionicons name="close-circle" size={22} color={COLORS.danger} />
+          </TouchableOpacity>
+        )}
       </View>
+      {koordinat && (
+        <Text style={styles.koordinatHint}>
+          📍 {koordinat.latitude.toFixed(6)}, {koordinat.longitude.toFixed(6)}
+        </Text>
+      )}
 
       {/* Info */}
       <View style={styles.infoBox}>
@@ -251,10 +313,11 @@ interface Step2Props {
   judul: string;
   deskripsi: string;
   lokasi: string;
+  koordinat: Koordinat | null;
   buktiList: BuktiItem[];
 }
 
-function Step2Konfirmasi({ selectedKat, judul, deskripsi, lokasi, buktiList }: Step2Props) {
+function Step2Konfirmasi({ selectedKat, judul, deskripsi, lokasi, koordinat, buktiList }: Step2Props) {
   return (
     <View style={styles.stepWrap}>
       <Text style={styles.stepTitle}>Konfirmasi Laporan</Text>
@@ -320,7 +383,7 @@ function Step2Konfirmasi({ selectedKat, judul, deskripsi, lokasi, buktiList }: S
         )}
 
         {/* Lokasi */}
-        {lokasi.trim() !== "" && (
+        {(lokasi.trim() !== "" || koordinat) && (
           <>
             <View style={styles.summaryDivider} />
             <View style={styles.summaryRow}>
@@ -329,7 +392,12 @@ function Step2Konfirmasi({ selectedKat, judul, deskripsi, lokasi, buktiList }: S
               </View>
               <View style={styles.summaryBody}>
                 <Text style={styles.summaryKey}>Lokasi Kejadian</Text>
-                <Text style={styles.summaryVal}>{lokasi}</Text>
+                {lokasi.trim() !== "" && <Text style={styles.summaryVal}>{lokasi}</Text>}
+                {koordinat && (
+                  <Text style={[styles.summaryVal, { fontSize: FONT.xs, color: COLORS.textMuted }]}>
+                    📍 {koordinat.latitude.toFixed(6)}, {koordinat.longitude.toFixed(6)}
+                  </Text>
+                )}
               </View>
             </View>
           </>
@@ -372,6 +440,7 @@ export default function BuatPengaduanScreen() {
   const [deskripsi, setDeskripsi]     = useState("");
   const [buktiList, setBuktiList]     = useState<BuktiItem[]>([]);
   const [lokasi, setLokasi]           = useState("");
+  const [koordinat, setKoordinat]     = useState<Koordinat | null>(null);
 
   // Modal
   const [katModal, setKatModal] = useState(false);
@@ -384,10 +453,11 @@ export default function BuatPengaduanScreen() {
   }, []);
 
   // ── Callbacks — stable references ─────────────────────────────────────────
-  const handleJudulChange     = useCallback((v: string) => setJudul(v), []);
-  const handleDeskripsiChange = useCallback((v: string) => setDeskripsi(v), []);
-  const handleLokasiChange    = useCallback((v: string) => setLokasi(v), []);
-  const handleOpenKatModal    = useCallback(() => setKatModal(true), []);
+  const handleJudulChange      = useCallback((v: string) => setJudul(v), []);
+  const handleDeskripsiChange  = useCallback((v: string) => setDeskripsi(v), []);
+  const handleLokasiChange     = useCallback((v: string) => setLokasi(v), []);
+  const handleKoordinatChange  = useCallback((k: Koordinat | null) => setKoordinat(k), []);
+  const handleOpenKatModal     = useCallback(() => setKatModal(true), []);
   const handleHapusBukti      = useCallback((i: number) => setBuktiList((prev) => prev.filter((_, idx) => idx !== i)), []);
 
   // ── Upload bukti ──────────────────────────────────────────────────────────
@@ -450,7 +520,11 @@ export default function BuatPengaduanScreen() {
     fd.append("kategori_aduan_id", String(selectedKat!.id));
     fd.append("judul",     judul.trim());
     fd.append("deskripsi", deskripsi.trim());
-    if (lokasi.trim()) fd.append("lokasi", lokasi.trim());
+    if (lokasi.trim())    fd.append("lokasi",    lokasi.trim());
+    if (koordinat) {
+      fd.append("latitude",  String(koordinat.latitude));
+      fd.append("longitude", String(koordinat.longitude));
+    }
     buktiList.forEach((b) =>
       fd.append("bukti[]", { uri: b.uri, name: b.name, type: b.type } as any),
     );
@@ -510,11 +584,13 @@ export default function BuatPengaduanScreen() {
             judul={judul}
             deskripsi={deskripsi}
             lokasi={lokasi}
+            koordinat={koordinat}
             buktiList={buktiList}
             maxBukti={MAX_BUKTI}
             onJudulChange={handleJudulChange}
             onDeskripsiChange={handleDeskripsiChange}
             onLokasiChange={handleLokasiChange}
+            onKoordinatChange={handleKoordinatChange}
             onOpenKatModal={handleOpenKatModal}
             onTambahBukti={handleTambahBukti}
             onHapusBukti={handleHapusBukti}
@@ -525,6 +601,7 @@ export default function BuatPengaduanScreen() {
             judul={judul}
             deskripsi={deskripsi}
             lokasi={lokasi}
+            koordinat={koordinat}
             buktiList={buktiList}
           />
         )}
@@ -682,15 +759,40 @@ const styles = StyleSheet.create({
   uploadTitle: { fontSize: FONT.xl, fontWeight: "700", color: COLORS.primary },
   uploadSub:   { fontSize: FONT.sm, color: COLORS.textMuted },
 
-  // Map placeholder
-  mapPlaceholder: {
-    backgroundColor: COLORS.white, borderRadius: RADIUS.lg,
-    borderWidth: 1, borderColor: COLORS.border, borderStyle: "dashed",
-    height: 130, marginTop: SPACING.sm,
-    justifyContent: "center", alignItems: "center", gap: SPACING.xs,
+  // Location button
+  btnLokasi: {
+    flexDirection: "row", alignItems: "center", gap: SPACING.sm,
+    borderWidth: 1.5, borderColor: COLORS.primary, borderRadius: RADIUS.lg,
+    paddingHorizontal: SPACING.md, paddingVertical: SPACING.sm + 2,
+    marginTop: SPACING.sm, alignSelf: "flex-start",
+    backgroundColor: COLORS.primaryLight,
   },
-  mapText: { fontSize: FONT.md, fontWeight: "600", color: COLORS.textSecondary },
-  mapSub:  { fontSize: FONT.sm, color: COLORS.textMuted },
+  btnLokasiText: { fontSize: FONT.sm, fontWeight: "700", color: COLORS.primary },
+
+  // MapView
+  mapWrap: {
+    height: 200, borderRadius: RADIUS.lg, overflow: "hidden",
+    marginTop: SPACING.sm, borderWidth: 1, borderColor: COLORS.border,
+  },
+  map: { flex: 1 },
+  mapOverlayHint: {
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: "flex-end", alignItems: "center",
+    paddingBottom: SPACING.md, gap: 4,
+  },
+  mapOverlayText: {
+    fontSize: FONT.sm, fontWeight: "600", color: "#fff",
+    backgroundColor: "rgba(0,0,0,0.45)", paddingHorizontal: SPACING.sm,
+    paddingVertical: 3, borderRadius: RADIUS.sm, overflow: "hidden",
+  },
+  mapClearBtn: {
+    position: "absolute", top: SPACING.sm, right: SPACING.sm,
+    backgroundColor: "#fff", borderRadius: RADIUS.full,
+    ...SHADOW.sm,
+  },
+  koordinatHint: {
+    fontSize: FONT.xs, color: COLORS.textMuted, marginTop: 4,
+  },
 
   // Info box
   infoBox: {

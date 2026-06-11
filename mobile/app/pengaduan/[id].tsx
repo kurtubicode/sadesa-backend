@@ -7,6 +7,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter, useFocusEffect } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import MapView, { Marker } from "react-native-maps";
 import api from "@/lib/api";
 import { COLORS, FONT, RADIUS, SHADOW, SPACING } from "@/constants/theme";
 
@@ -35,6 +36,9 @@ interface DetailPengaduan {
   deskripsi: string;
   status: string;
   created_at: string;
+  lokasi: string | null;
+  latitude: number | null;
+  longitude: number | null;
   kategori: { id: number; nama_kategori: string } | null;
   bukti: Bukti[];
   tanggapan: Tanggapan[];
@@ -171,6 +175,38 @@ export default function DetailPengaduanScreen() {
       <View style={[styles.card, { padding: SPACING.lg }]}>
         <Text style={styles.bodyText}>{data.deskripsi}</Text>
       </View>
+
+      {/* ── Lokasi & Peta ── */}
+      {(data.lokasi || (data.latitude && data.longitude)) && (
+        <>
+          <Text style={styles.sectionLabel}>Lokasi Kejadian</Text>
+          <View style={styles.card}>
+            {data.lokasi && (
+              <View style={styles.lokasiRow}>
+                <Ionicons name="location-outline" size={16} color={COLORS.warning} />
+                <Text style={styles.lokasiText}>{data.lokasi}</Text>
+              </View>
+            )}
+            {data.latitude && data.longitude && (
+              <View style={styles.mapWrap}>
+                <MapView
+                  style={styles.map}
+                  region={{
+                    latitude: data.latitude,
+                    longitude: data.longitude,
+                    latitudeDelta: 0.005,
+                    longitudeDelta: 0.005,
+                  }}
+                  scrollEnabled={false}
+                  zoomEnabled={false}
+                >
+                  <Marker coordinate={{ latitude: data.latitude, longitude: data.longitude }} />
+                </MapView>
+              </View>
+            )}
+          </View>
+        </>
+      )}
 
       {/* ── Timeline ── */}
       <Text style={styles.sectionLabel}>Perkembangan Status</Text>
@@ -311,6 +347,11 @@ const styles = StyleSheet.create({
   tanggal:       { fontSize: FONT.sm, color: COLORS.textMuted },
 
   bodyText: { fontSize: FONT.md, color: COLORS.text, lineHeight: 22 },
+
+  lokasiRow: { flexDirection: "row", gap: SPACING.sm, alignItems: "flex-start", padding: SPACING.lg },
+  lokasiText: { flex: 1, fontSize: FONT.md, color: COLORS.text },
+  mapWrap: { height: 180, overflow: "hidden", borderBottomLeftRadius: RADIUS.xl, borderBottomRightRadius: RADIUS.xl },
+  map: { flex: 1 },
 
   // Timeline
   tlRow:  { flexDirection: "row", alignItems: "flex-start" },

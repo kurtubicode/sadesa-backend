@@ -67,6 +67,9 @@ class PengaduanController extends Controller
                 'kategori'   => $pengaduan->kategori
                     ? ['id' => $pengaduan->kategori->id, 'nama_kategori' => $pengaduan->kategori->nama_kategori]
                     : null,
+                'lokasi'     => $pengaduan->lokasi,
+                'latitude'   => $pengaduan->latitude ? (float) $pengaduan->latitude : null,
+                'longitude'  => $pengaduan->longitude ? (float) $pengaduan->longitude : null,
                 'bukti'      => $pengaduan->bukti->map(fn ($b) => [
                     'id'        => $b->id,
                     'path_file' => $b->path_file,
@@ -86,6 +89,9 @@ class PengaduanController extends Controller
             'kategori_aduan_id' => 'required|exists:kategori_aduan,id',
             'judul'             => 'required|string|max:255',
             'deskripsi'         => 'required|string',
+            'lokasi'            => 'nullable|string|max:255',
+            'latitude'          => 'nullable|numeric|between:-90,90',
+            'longitude'         => 'nullable|numeric|between:-180,180',
             // Mendukung bukti tunggal (bukti) dan array (bukti.*)
             'bukti'             => 'nullable|file|mimes:jpg,jpeg,png|max:5120',
             'bukti.*'           => 'nullable|file|mimes:jpg,jpeg,png|max:5120',
@@ -97,6 +103,9 @@ class PengaduanController extends Controller
             'judul'             => $request->judul,
             'deskripsi'         => $request->deskripsi,
             'status'            => 'menunggu',
+            'lokasi'            => $request->lokasi,
+            'latitude'          => $request->latitude,
+            'longitude'         => $request->longitude,
         ]);
 
         // Kumpulkan semua file bukti (tunggal atau array)

@@ -16,6 +16,9 @@ class Pengaduan extends Model
         'judul',
         'deskripsi',
         'status',
+        'lokasi',
+        'latitude',
+        'longitude',
     ];
 
     public function user(): BelongsTo
