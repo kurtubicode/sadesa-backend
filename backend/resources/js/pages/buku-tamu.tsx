@@ -33,20 +33,20 @@ export default function BukuTamu() {
         <PublicLayout>
             <Head title="Buku Tamu Digital | Pemerintah Desa Cirangkong" />
 
-            <div className="bg-gray-50 dark:bg-gray-900/40 min-h-screen py-12">
+            <div className="bg-muted min-h-screen py-12">
                 <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8">
                     {/* Intro */}
                     <div className="mb-10 text-center">
-                        <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight">
+                        <h1 className="text-3xl font-extrabold text-foreground tracking-tight">
                             Buku Tamu Digital
                         </h1>
-                        <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                        <p className="mt-2 text-sm text-muted-foreground">
                             Silakan isi data kunjungan Anda sebelum memulai pelayanan di Kantor Desa Cirangkong.
                         </p>
                     </div>
 
                     {/* Card */}
-                    <div className="overflow-hidden rounded-3xl border border-gray-100 bg-white shadow-xl shadow-teal-900/5 dark:border-gray-800 dark:bg-gray-800">
+                    <div className="overflow-hidden rounded-3xl border border-border bg-card shadow-xl shadow-teal-900/5">
                         {/* Status bar */}
                         <div className="h-2 bg-gradient-to-r from-teal-500 to-emerald-500"></div>
 
@@ -57,10 +57,10 @@ export default function BukuTamu() {
                                     <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-teal-50 dark:bg-teal-900/20">
                                         <CheckCircle className="h-10 w-10 text-teal-600 dark:text-teal-400" />
                                     </div>
-                                    <h2 className="mb-3 text-2xl font-bold text-gray-900 dark:text-white">
+                                    <h2 className="mb-3 text-2xl font-bold text-foreground">
                                         Data Tersimpan!
                                     </h2>
-                                    <p className="mb-8 text-base text-gray-500 dark:text-gray-400 leading-relaxed">
+                                    <p className="mb-8 text-base text-muted-foreground leading-relaxed">
                                         Terima kasih telah mengisi buku tamu. <br />
                                         Silakan menunggu antrian atau langsung menuju loket pelayanan yang dituju.
                                     </p>

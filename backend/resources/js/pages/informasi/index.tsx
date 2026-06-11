@@ -36,7 +36,7 @@ export default function InformasiIndex({ konten, filters }: Props) {
         <PublicLayout>
             <Head title="Pusat Informasi & Berita Resmi | Pemerintah Desa Cirangkong" />
 
-            <div className="bg-gray-50 dark:bg-gray-900/40 min-h-screen py-12">
+            <div className="bg-muted min-h-screen py-12">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     {/* Page title */}
                     <div className="mb-10 text-center border-b pb-8 border-gray-200 dark:border-gray-800">
@@ -49,7 +49,7 @@ export default function InformasiIndex({ konten, filters }: Props) {
                     </div>
 
                     {/* Filter & Search */}
-                    <div className="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4 bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
+                    <div className="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4 bg-card border-border shadow-sm dark:bg-gray-800">
                         <div className="flex flex-wrap gap-2">
                             {(['', 'berita', 'pengumuman'] as const).map(t => (
                                 <button
@@ -88,7 +88,7 @@ export default function InformasiIndex({ konten, filters }: Props) {
                     ) : (
                         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                             {konten.data.map(item => (
-                                <article key={item.id} className="group flex flex-col rounded-2xl border border-gray-100 bg-white dark:border-gray-700 dark:bg-gray-800 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-md">
+                                <article key={item.id} className="group flex flex-col rounded-2xl border border-border bg-card shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-md">
                                     <div className="h-44 rounded-t-2xl bg-gradient-to-br from-teal-600 to-emerald-700 p-6 flex flex-col justify-between text-white relative overflow-hidden">
                                         <div className="absolute top-0 right-0 p-8 opacity-10 font-bold text-7xl select-none">GOV</div>
                                         <div>

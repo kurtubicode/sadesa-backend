@@ -30,7 +30,7 @@ export default function InformasiShow({ artikel, terkait }: Props) {
         <PublicLayout>
             <Head title={`${artikel.judul} | Informasi Resmi Desa Cirangkong`} />
 
-            <div className="bg-gray-50 dark:bg-gray-900/40 min-h-screen py-10">
+            <div className="bg-muted min-h-screen py-10">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     {/* Breadcrumb / Back */}
                     <nav className="mb-8">
@@ -45,7 +45,7 @@ export default function InformasiShow({ artikel, terkait }: Props) {
                     <div className="grid gap-10 lg:grid-cols-3">
                         {/* Artikel utama */}
                         <div className="lg:col-span-2">
-                            <article className="overflow-hidden rounded-3xl border border-gray-100 bg-white shadow-sm dark:border-gray-800 dark:bg-gray-800">
+                            <article className="overflow-hidden rounded-3xl border border-border bg-card shadow-sm">
                                 {/* Header Artikel */}
                                 <div className="bg-gradient-to-r from-teal-600 to-emerald-600 px-8 py-10 text-white relative">
                                     <div className="absolute top-0 right-0 p-10 opacity-10 font-bold text-8xl select-none">DOC</div>
@@ -104,8 +104,8 @@ export default function InformasiShow({ artikel, terkait }: Props) {
                         {/* Sidebar */}
                         <aside className="space-y-8">
                             {/* Artikel Terkait */}
-                            <div className="rounded-3xl border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-800">
-                                <h3 className="mb-5 flex items-center gap-2 text-lg font-bold text-gray-900 dark:text-white">
+                            <div className="rounded-3xl border border-border bg-card p-6 shadow-sm">
+                                <h3 className="mb-5 flex items-center gap-2 text-lg font-bold text-foreground">
                                     <Newspaper className="h-5 w-5 text-teal-600" />
                                     {artikel.tipe === 'berita' ? 'Berita' : 'Pengumuman'} Lainnya
                                 </h3>

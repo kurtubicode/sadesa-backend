@@ -67,8 +67,8 @@ function Navbar({ user, canRegister }: { user: PageProps['auth']['user']; canReg
                         </svg>
                     </div>
                     <div>
-                        <span className={`text-lg font-bold leading-none ${scrolled ? 'text-gray-900 dark:text-white' : 'text-white'}`}>SADESA</span>
-                        <p className={`text-xs leading-none ${scrolled ? 'text-gray-500 dark:text-gray-400' : 'text-teal-100'}`}>Desa Cirangkong</p>
+                        <span className={`text-lg font-bold leading-none ${scrolled ? 'text-foreground' : 'text-white'}`}>SADESA</span>
+                        <p className={`text-xs leading-none ${scrolled ? 'text-muted-foreground' : 'text-teal-100'}`}>Desa Cirangkong</p>
                     </div>
                 </a>
 
@@ -232,17 +232,17 @@ function Tentang() {
     ];
 
     return (
-        <section id="tentang" className="bg-white py-24 dark:bg-gray-900">
+        <section id="tentang" className="bg-background py-24">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div className="grid items-center gap-16 lg:grid-cols-2">
                     <div>
                         <div className="mb-3 inline-block rounded-full bg-teal-50 px-4 py-1.5 text-sm font-semibold text-teal-700 dark:bg-teal-900/30 dark:text-teal-300">
                             Tentang SADESA
                         </div>
-                        <h2 className="mb-6 text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl">
+                        <h2 className="mb-6 text-3xl font-bold text-foreground sm:text-4xl">
                             Platform Digital untuk Desa yang Lebih Baik
                         </h2>
-                        <p className="mb-6 text-base leading-relaxed text-gray-600 dark:text-gray-400">
+                        <p className="mb-6 text-base leading-relaxed text-muted-foreground">
                             SADESA — Sahabat Digital Desa, adalah platform digital yang dirancang khusus untuk memudahkan pengelolaan administrasi Desa Cirangkong. Mengintegrasikan berbagai layanan desa dalam satu platform yang mudah diakses, transparan, dan efisien.
                         </p>
                         <div className="space-y-3">
@@ -261,12 +261,12 @@ function Tentang() {
 
                     <div className="grid grid-cols-2 gap-4">
                         {keunggulan.map((k, i) => (
-                            <div key={i} className="rounded-2xl border bg-white p-5 shadow-sm transition hover:shadow-md dark:border-gray-700 dark:bg-gray-800">
+                            <div key={i} className="rounded-2xl border border-border bg-card p-5 shadow-sm transition hover:shadow-md">
                                 <div className={`mb-3 inline-flex h-11 w-11 items-center justify-center rounded-xl ${k.color}`}>
                                     <k.icon className="h-5 w-5" />
                                 </div>
-                                <h3 className="mb-1.5 text-sm font-bold text-gray-900 dark:text-white">{k.title}</h3>
-                                <p className="text-xs leading-relaxed text-gray-500 dark:text-gray-400">{k.desc}</p>
+                                <h3 className="mb-1.5 text-sm font-bold text-foreground">{k.title}</h3>
+                                <p className="text-xs leading-relaxed text-muted-foreground">{k.desc}</p>
                             </div>
                         ))}
                     </div>
@@ -287,28 +287,28 @@ function Fitur() {
     ];
 
     return (
-        <section id="fitur" className="bg-gray-50 py-24 dark:bg-gray-800">
+        <section id="fitur" className="bg-muted py-24">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div className="mb-14 text-center">
                     <div className="mb-3 inline-block rounded-full bg-teal-50 px-4 py-1.5 text-sm font-semibold text-teal-700 dark:bg-teal-900/30 dark:text-teal-300">
                         Fitur & Layanan
                     </div>
-                    <h2 className="mb-4 text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl">
+                    <h2 className="mb-4 text-3xl font-bold text-foreground sm:text-4xl">
                         Semua Kebutuhan Desa dalam Satu Platform
                     </h2>
-                    <p className="mx-auto max-w-2xl text-base text-gray-600 dark:text-gray-400">
+                    <p className="mx-auto max-w-2xl text-base text-muted-foreground">
                         Berbagai fitur yang memudahkan administrasi dan pelayanan desa untuk seluruh warga Cirangkong
                     </p>
                 </div>
 
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
                     {fitur.map((f, i) => (
-                        <div key={i} className="group rounded-2xl border bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg dark:border-gray-700 dark:bg-gray-900">
+                        <div key={i} className="group rounded-2xl border border-border bg-card p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
                             <div className={`mb-5 flex h-14 w-14 items-center justify-center rounded-2xl ${f.color} shadow-md`}>
                                 <f.icon className="h-6 w-6 text-white" />
                             </div>
-                            <h3 className="mb-3 text-base font-bold text-gray-900 dark:text-white">{f.title}</h3>
-                            <p className="text-sm leading-relaxed text-gray-500 dark:text-gray-400">{f.desc}</p>
+                            <h3 className="mb-3 text-base font-bold text-foreground">{f.title}</h3>
+                            <p className="text-sm leading-relaxed text-muted-foreground">{f.desc}</p>
                         </div>
                     ))}
                 </div>
@@ -339,13 +339,13 @@ function ProfilDesa() {
     ];
 
     return (
-        <section className="bg-white py-24 dark:bg-gray-900">
+        <section className="bg-background py-24">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div className="mb-14 text-center">
                     <div className="mb-3 inline-block rounded-full bg-teal-50 px-4 py-1.5 text-sm font-semibold text-teal-700 dark:bg-teal-900/30 dark:text-teal-300">
                         Profil Desa
                     </div>
-                    <h2 className="text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl">
+                    <h2 className="text-3xl font-bold text-foreground sm:text-4xl">
                         Profil Desa Cirangkong
                     </h2>
                 </div>
@@ -353,7 +353,7 @@ function ProfilDesa() {
                 <div className="grid gap-10 lg:grid-cols-2">
                     {/* Visi Misi */}
                     <div className="space-y-6">
-                        <p className="text-base leading-relaxed text-gray-600 dark:text-gray-400">
+                        <p className="text-base leading-relaxed text-muted-foreground">
                             Desa Cirangkong merupakan salah satu desa yang berada di wilayah Kabupaten Bandung, Jawa Barat. Dengan komitmen untuk terus berkembang, kami menghadirkan sistem digital untuk meningkatkan kualitas pelayanan kepada masyarakat.
                         </p>
 
@@ -365,10 +365,10 @@ function ProfilDesa() {
                         </div>
 
                         <div>
-                            <h3 className="mb-3 font-bold text-gray-900 dark:text-white">Misi</h3>
+                            <h3 className="mb-3 font-bold text-foreground">Misi</h3>
                             <ol className="space-y-2">
                                 {misi.map((m, i) => (
-                                    <li key={i} className="flex gap-3 text-sm text-gray-600 dark:text-gray-400">
+                                    <li key={i} className="flex gap-3 text-sm text-muted-foreground">
                                         <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-teal-100 text-xs font-bold text-teal-700 dark:bg-teal-900/50 dark:text-teal-300">{i + 1}</span>
                                         {m}
                                     </li>
@@ -379,13 +379,13 @@ function ProfilDesa() {
 
                     {/* Struktur */}
                     <div>
-                        <h3 className="mb-4 font-bold text-gray-900 dark:text-white">Struktur Organisasi</h3>
+                        <h3 className="mb-4 font-bold text-foreground">Struktur Organisasi</h3>
                         <div className="space-y-2">
                             {struktur.map((s, i) => (
-                                <div key={i} className={`flex items-center justify-between rounded-xl p-3.5 ${i === 0 ? 'bg-teal-600 text-white' : 'border bg-gray-50 dark:border-gray-700 dark:bg-gray-800'}`}>
+                                <div key={i} className={`flex items-center justify-between rounded-xl p-3.5 ${i === 0 ? 'bg-teal-600 text-white' : 'border border-border bg-muted/50'}`}>
                                     <div>
-                                        <p className={`text-sm font-semibold ${i === 0 ? 'text-white' : 'text-gray-900 dark:text-white'}`}>{s.jabatan}</p>
-                                        <p className={`text-xs ${i === 0 ? 'text-teal-100' : 'text-gray-500 dark:text-gray-400'}`}>{s.nama}</p>
+                                        <p className={`text-sm font-semibold ${i === 0 ? 'text-white' : 'text-foreground'}`}>{s.jabatan}</p>
+                                        <p className={`text-xs ${i === 0 ? 'text-teal-100' : 'text-muted-foreground'}`}>{s.nama}</p>
                                     </div>
                                     {i === 0 && (
                                         <div className="rounded-full bg-white/20 px-2 py-0.5 text-xs text-white">Pimpinan</div>
@@ -423,37 +423,37 @@ function Transparansi() {
     ];
 
     return (
-        <section id="transparansi" className="bg-gray-50 py-24 dark:bg-gray-800">
+        <section id="transparansi" className="bg-muted py-24">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div className="mb-14 text-center">
                     <div className="mb-3 inline-block rounded-full bg-teal-50 px-4 py-1.5 text-sm font-semibold text-teal-700 dark:bg-teal-900/30 dark:text-teal-300">
                         Transparansi
                     </div>
-                    <h2 className="mb-4 text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl">
+                    <h2 className="mb-4 text-3xl font-bold text-foreground sm:text-4xl">
                         Transparansi Anggaran & Program
                     </h2>
-                    <p className="text-base text-gray-600 dark:text-gray-400">Keterbukaan informasi untuk akuntabilitas yang lebih baik</p>
+                    <p className="text-base text-muted-foreground">Keterbukaan informasi untuk akuntabilitas yang lebih baik</p>
                 </div>
 
                 <div className="grid gap-8 lg:grid-cols-3">
                     {/* APBDes */}
                     <div className="lg:col-span-2 space-y-6">
-                        <div className="rounded-2xl border bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+                        <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
                             <div className="mb-4 flex items-center justify-between">
-                                <h3 className="font-bold text-gray-900 dark:text-white">APBDes Tahun 2025</h3>
+                                <h3 className="font-bold text-foreground">APBDes Tahun 2025</h3>
                                 <span className="rounded-full bg-teal-50 px-3 py-1 text-xs font-semibold text-teal-700 dark:bg-teal-900/30 dark:text-teal-300">
                                     Total: Rp 1,245 M
                                 </span>
                             </div>
 
                             <div className="mb-5">
-                                <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">Pendapatan</p>
+                                <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Pendapatan</p>
                                 <div className="space-y-2">
                                     {pendapatan.map((p, i) => (
                                         <div key={i}>
                                             <div className="mb-1 flex justify-between text-xs">
-                                                <span className="text-gray-600 dark:text-gray-400">{p.label}</span>
-                                                <span className="font-medium text-gray-900 dark:text-white">{formatRupiah(p.value)}</span>
+                                                <span className="text-muted-foreground">{p.label}</span>
+                                                <span className="font-medium text-foreground">{formatRupiah(p.value)}</span>
                                             </div>
                                             <div className="h-1.5 overflow-hidden rounded-full bg-gray-100 dark:bg-gray-700">
                                                 <div className="h-full rounded-full bg-teal-500 transition-all"
@@ -465,13 +465,13 @@ function Transparansi() {
                             </div>
 
                             <div>
-                                <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">Belanja</p>
+                                <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Belanja</p>
                                 <div className="space-y-2">
                                     {belanja.map((b, i) => (
                                         <div key={i}>
                                             <div className="mb-1 flex justify-between text-xs">
-                                                <span className="text-gray-600 dark:text-gray-400">{b.label}</span>
-                                                <span className="font-medium text-gray-900 dark:text-white">{formatRupiah(b.value)}</span>
+                                                <span className="text-muted-foreground">{b.label}</span>
+                                                <span className="font-medium text-foreground">{formatRupiah(b.value)}</span>
                                             </div>
                                             <div className="h-1.5 overflow-hidden rounded-full bg-gray-100 dark:bg-gray-700">
                                                 <div className="h-full rounded-full bg-blue-500 transition-all"
@@ -486,13 +486,13 @@ function Transparansi() {
 
                     {/* Program Prioritas */}
                     <div>
-                        <div className="rounded-2xl border bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
-                            <h3 className="mb-4 font-bold text-gray-900 dark:text-white">Program Prioritas 2025</h3>
+                        <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
+                            <h3 className="mb-4 font-bold text-foreground">Program Prioritas 2025</h3>
                             <div className="space-y-5">
                                 {program.map((p, i) => (
                                     <div key={i}>
                                         <div className="mb-1.5 flex items-start justify-between gap-2">
-                                            <p className="text-sm font-semibold text-gray-900 dark:text-white">{p.judul}</p>
+                                            <p className="text-sm font-semibold text-foreground">{p.judul}</p>
                                             <span className="shrink-0 rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-600 dark:bg-gray-700 dark:text-gray-400">
                                                 {p.status}
                                             </span>
@@ -501,7 +501,7 @@ function Transparansi() {
                                             <div className={`h-full rounded-full ${p.color} transition-all`}
                                                 style={{ width: `${p.progress}%` }} />
                                         </div>
-                                        <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400">
+                                        <div className="flex justify-between text-xs text-muted-foreground">
                                             <span>{p.progress}% selesai</span>
                                             <span>{formatRupiah(p.anggaran)}</span>
                                         </div>
@@ -520,14 +520,14 @@ function Transparansi() {
 
 function Berita({ berita = [] }: { berita?: any[] }) {
     return (
-        <section id="berita" className="bg-white py-24 dark:bg-gray-900">
+        <section id="berita" className="bg-background py-24">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div className="mb-14 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-end">
                     <div>
                         <div className="mb-3 inline-block rounded-full bg-teal-50 px-4 py-1.5 text-sm font-semibold text-teal-700 dark:bg-teal-900/30 dark:text-teal-300">
                             Berita & Pengumuman
                         </div>
-                        <h2 className="text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl">
+                        <h2 className="text-3xl font-bold text-foreground sm:text-4xl">
                             Berita & Pengumuman Terbaru
                         </h2>
                     </div>
@@ -538,7 +538,7 @@ function Berita({ berita = [] }: { berita?: any[] }) {
 
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
                     {berita.length > 0 ? berita.map((b, i) => (
-                        <article key={i} className="group flex flex-col rounded-2xl border bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-md dark:border-gray-700 dark:bg-gray-800">
+                        <article key={i} className="group flex flex-col rounded-2xl border border-border bg-card shadow-sm transition hover:-translate-y-1 hover:shadow-md">
                             <div className="h-36 rounded-t-2xl bg-gradient-to-br from-teal-600 to-emerald-700" />
                             <div className="flex flex-1 flex-col p-5">
                                 <div className="mb-3 flex items-center gap-2">
@@ -552,7 +552,7 @@ function Berita({ berita = [] }: { berita?: any[] }) {
                                 <h3 className="mb-2 flex-1 text-sm font-bold leading-snug text-gray-900 group-hover:text-teal-600 dark:text-white dark:group-hover:text-teal-400 line-clamp-2">
                                     {b.judul}
                                 </h3>
-                                <p className="mb-4 text-xs leading-relaxed text-gray-500 dark:text-gray-400 line-clamp-2" dangerouslySetInnerHTML={{ __html: b.konten.substring(0, 100) + '...' }} />
+                                <p className="mb-4 text-xs leading-relaxed text-muted-foreground line-clamp-2" dangerouslySetInnerHTML={{ __html: b.konten.substring(0, 100) + '...' }} />
                                 <Link href={`/informasi/${b.slug}`} className="flex items-center gap-1 text-xs font-semibold text-teal-600 hover:text-teal-700 dark:text-teal-400">
                                     Baca selengkapnya <ChevronRight className="h-3.5 w-3.5" />
                                 </Link>
@@ -573,13 +573,13 @@ function Berita({ berita = [] }: { berita?: any[] }) {
 
 function Kontak() {
     return (
-        <section id="kontak" className="bg-gray-50 py-24 dark:bg-gray-800">
+        <section id="kontak" className="bg-muted py-24">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div className="mb-14 text-center">
                     <div className="mb-3 inline-block rounded-full bg-teal-50 px-4 py-1.5 text-sm font-semibold text-teal-700 dark:bg-teal-900/30 dark:text-teal-300">
                         Kontak
                     </div>
-                    <h2 className="text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl">Hubungi Kami</h2>
+                    <h2 className="text-3xl font-bold text-foreground sm:text-4xl">Hubungi Kami</h2>
                 </div>
 
                 <div className="grid gap-8 lg:grid-cols-3">
@@ -623,7 +623,7 @@ function Kontak() {
                                     { Icon: Youtube, href: '#', label: 'YouTube' },
                                 ].map(({ Icon, href, label }) => (
                                     <a key={label} href={href}
-                                        className="flex h-9 w-9 items-center justify-center rounded-xl border bg-white text-gray-500 transition hover:border-teal-400 hover:bg-teal-50 hover:text-teal-600 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-teal-500 dark:hover:bg-teal-900/30 dark:hover:text-teal-400">
+                                        className="flex h-9 w-9 items-center justify-center rounded-xl border border-border bg-card text-muted-foreground transition hover:border-teal-400 hover:bg-teal-50 hover:text-teal-600 dark:hover:border-teal-500 dark:hover:bg-teal-900/30 dark:hover:text-teal-400">
                                         <Icon className="h-4 w-4" />
                                     </a>
                                 ))}
@@ -633,7 +633,7 @@ function Kontak() {
 
                     {/* Map */}
                     <div className="lg:col-span-2">
-                        <div className="overflow-hidden rounded-2xl border bg-white shadow-sm dark:border-gray-700 dark:bg-gray-900 h-full min-h-[400px]">
+                        <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm h-full min-h-[400px]">
                             <iframe 
                                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31718.42340576395!2d107.7262447!3d-6.4251765!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6923c6f05a9b73%3A0xc669f6f6f9c9a66a!2sDesa%20Cirangkong!5e0!3m2!1sid!2sid!4v1717000000000!5m2!1sid!2sid" 
                                 width="100%" 
@@ -642,6 +642,7 @@ function Kontak() {
                                 allowFullScreen={true} 
                                 loading="lazy" 
                                 referrerPolicy="no-referrer-when-downgrade"
+                                className="invert-[0.05] grayscale-[0.2] dark:invert-[0.9] dark:hue-rotate-180"
                             ></iframe>
                         </div>
                     </div>
